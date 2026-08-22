@@ -2,6 +2,16 @@ plugins {
     id 'com.android.application' version '8.5.2'
 }
 
+// GitHub browser uploads can flatten folders. Keep the repository flat,
+// but copy the one Java source file into an isolated generated source folder
+// before compilation so Gradle never treats its own build outputs as Java input.
+def flatJavaDir = file("$projectDir/.flat-java")
+
+tasks.register('prepareFlatJava', Sync) {
+    from('MainActivity.java')
+    into(flatJavaDir)
+}
+
 android {
     namespace 'com.fliprush7.app'
     compileSdk 35
@@ -17,8 +27,7 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['.']
-            java.include 'MainActivity.java'
+            java.srcDirs = [flatJavaDir]
         }
     }
 
@@ -26,4 +35,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    dependsOn tasks.named('prepareFlatJava')
 }
