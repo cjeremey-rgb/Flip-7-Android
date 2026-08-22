@@ -4,8 +4,10 @@
 
     <application
         android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
         android:label="Flip Rush 7"
-        android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
+        android:theme="@style/Theme.FlipRush7"
         android:usesCleartextTraffic="false">
 
         <activity
